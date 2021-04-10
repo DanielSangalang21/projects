@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TBL_SOUND_EQUPMENT">
+ 	<resultMap type="dcs.rentalApp.bean.SoundEquipmentBean" id="equipment">
+		<result column="EQUIPMENT_ID" property="equipmentId"/>
+		<result column="BRAND" property="brand"/>
+		<result column="MODEL" property="model"/>
+		<result column="RATE_PER_DAY" property="ratePerDay"/>
+		<result column="PICTURE_PATH" property="picturePath"/>
+	</resultMap>
+
+	<select id="getEquipments" resultMap="equipment">
+		SELECT * FROM [dbo].[TBL_SOUND_EQUIPMENT]
+	</select>
+	
+	<select id="getEquipment" resultMap="equipment">
+		SELECT TOP(1) * FROM [dbo].[TBL_SOUND_EQUIPMENT]
+	</select>
+	
+	<insert id="addEquipment">
+		INSERT INTO TBL_SOUND_EQUIPMENT (
+			[EQUIPMENT_ID]
+			,[BRAND]
+			,[MODEL]
+			,[AVAILABLE]
+			,[RATE_PER_DAY]
+			,[PICTURE_PATH])
+		VALUES (
+			#{equipmentId}
+			,#{brand}
+			,#{model}
+			,#{available}
+			,#{ratePerDay}
+			,#{picturePath})
+	</insert>
+</mapper>

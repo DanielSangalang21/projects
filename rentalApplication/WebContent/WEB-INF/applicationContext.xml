@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:jee="http://www.springframework.org/schema/jee"
+xmlns:aop="http://www.springframework.org/schema/aop"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+xmlns:tx="http://www.springframework.org/schema/tx" 
+xmlns:p="http://www.springframework.org/schema/p"
+xmlns:util="http://www.springframework.org/schema/util"
+xmlns:mvc="http://www.springframework.org/schema/mvc"
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+ 	
+ 	<!--Define ApplicationContextProvider as bean, and automatically set it's ApplicationContext property
+	 because it is an instance of ApplicationContextAware interface   -->
+ 	 <bean id="applicationContextProvider" class="dcs.rentalApp.ApplicationContextProvider"></bean>
+ 	
+ 	<tx:annotation-driven/>
+ 	<context:component-scan base-package = "dcs.rentalApp, dcs" />
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<context:property-placeholder location="/WEB-INF/application.properties" />
+	
+   <bean class = "org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name = "prefix" value = "/WEB-INF/jsp/" />
+      <property name = "suffix" value = ".jsp" />
+   </bean>
+
+	
+	
+	 
+   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+  		<property name="dataSource" ref="dataSource" />
+  		<property name="mapperLocations" value="classpath*:dcs/rentalApp/sqlresources/*.xml" />
+   </bean>
+   
+   <!-- DataSource -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.passsword}" />
+	</bean>
+	
+	<!-- DAO implems -->
+	<bean id="soundEquipmentImplem" class="dcs.rentalApp.implem.SoundEquipmentImplem">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+	</bean>
+	
+	<!-- MultipartFile resolver bean -->
+	<!-- Used for MultipartFile Config -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <!--one of the properties available; the maximum file size in bytes-->
+    	<property name="maxUploadSize" value="5000000"/>
+	</bean>
+	
+	
+</beans>
